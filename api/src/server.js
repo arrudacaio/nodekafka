@@ -7,7 +7,7 @@ const app = express()
 
 // Responsável pela conexão com o kafka
 const kafka = new Kafka({
-  clientId: 'api-producer',
+  clientId: 'api-principal',
   brokers: ['localhost:9092'],
   logLevel: logLevel.WARN,
   retry: {
