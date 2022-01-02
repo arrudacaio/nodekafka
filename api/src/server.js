@@ -1,17 +1,41 @@
 import express from 'express'
-// import Kafka from 'kafkajs'
+import { Kafka, logLevel } from 'kafkajs'
+import routes from './routes/routes'
 
 const app = express()
 
-// const kafka = new Kafka({
-//   clientId: 'my-app',
-//   brokers: ['kafka1:9092', 'kafka2:9092']
-// })
 
-app.post('/invoices', (req, res) => {
-  // Call to a microservice
-
-  return res.json({ ok: true })
+// Responsável pela conexão com o kafka
+const kafka = new Kafka({
+  clientId: 'api-producer',
+  brokers: ['localhost:9092'],
+  logLevel: logLevel.WARN,
+  retry: {
+    initialRetryTime: 300,
+    retries: 10
+  }
 })
 
-app.listen(3333)
+const producer = kafka.producer()
+
+
+// Disponibilizando o producer para todas as rotas
+app.use((req, _, next) => {
+  req.producer = producer
+
+  next()
+})
+
+
+
+// Cadastra as rotas da aplicação
+app.use(routes)
+
+
+const run = async () => {
+  await producer.connect()
+  app.listen(3333)
+
+}
+
+run()
