@@ -9,19 +9,21 @@ const kafka = new Kafka({
 })
 
 const topic = 'issue-invoice'
-const consumer = kafka.consumer()
+// O consumer sempre pertence a um grupo de consumers
+const consumer = kafka.consumer({ groupId: 'invoice-group' })
 
 const run = async () => {
   await consumer.connect()
   await consumer.subscribe({ topic })
 
   await consumer.run({
-    eachMessage: async((payload) => {
-      console.log(`O payload completo: ${payload}`)
-      // const { topic, partition, message } = payload
+    eachMessage: async ({ topic, partition, message }) => {
 
-      // const prefix = `${topic}${partition}`
-    })
+      const prefix = `${topic}${partition} | ${message.offset} / ${message.timestamp}`
+
+      console.log(`- ${prefix} ${message.key}#${message.value}`)
+
+    }
   })
 }
 
