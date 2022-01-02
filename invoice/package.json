@@ -1,8 +1,11 @@
 {
   "name": "invoice",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "sucrase-node src/server.js"
+  },
   "dependencies": {
     "kafkajs": "^1.15.0"
   },
