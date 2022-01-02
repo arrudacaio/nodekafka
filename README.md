@@ -11,3 +11,8 @@ once the purchase has been completed.
 2. Move to the appropriate directory
 3. Run yarn to install dependencies.
 4. Run yarn start
+
+## Dependencies
+* Node.js >= 8.0.0
+* Yarn
+* Docker
