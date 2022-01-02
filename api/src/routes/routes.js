@@ -1,5 +1,5 @@
 import express from 'express'
-
+import { CompressionTypes } from 'kafkajs'
 const routes = express.Router()
 
 
@@ -18,6 +18,7 @@ routes.post('/invoices', async (req, res) => {
 
   await producer.send({
     topic: 'issue-invoice',
+    compression: CompressionTypes.GZIP,
     messages: [{ value: JSON.stringify(message) }]
   })
 
